@@ -7,64 +7,68 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     
-    var imageNumber = 0
-    var messageNumber = 0
+    var imageNumber = -1
+    var messageNumber = -1
+   var soundNumber = -1
+   var totalNumberOfSounds = 3
     let totalNumberOfImages = 9
+   var audioPlayer : AVAudioPlayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //messageLabel.text = ""
-       //print("👍 viewDidLoad has run!")
-        //messageLabel.text = "Fabulous, Thats You!!!"
     }
+   func playSound(name: String){
+      if let sound = NSDataAsset(name: name){
+         do {
+            try audioPlayer = AVAudioPlayer(data: sound.data)
+            audioPlayer.play()
+         }
+         catch {
+            print("ERROR: \(error.localizedDescription) Could not intitialize AVAUDIOPLAYER object")
+         }
+      }
+      else {
+         print("could not read data from file sound0")
+      }
+   }
+   
     @IBAction func messageButtonPressed(_ sender: UIButton) {
         let messages = ["Ya Awesome", "Ya Great", "You Fantastic", "Fab? thats You","When the genius bar needs help they call you","Another good message"]
-        messageLabel.text = messages[Int.random(in: 0...messages.count-1)]
-            imageView.image = UIImage(named: "image\(Int.random(in: 0...totalNumberOfImages))")
-    //    messageLabel.text = messages[messageNumber]
-      //  messageNumber += 1
-       // if messageNumber == messages.count{
-         //   messageNumber = 0
-        //}
-        
-        //let imageName = "image" + String(imageNumber)
-  //      let imageName = "image\(imageNumber)"
-   //     imageView.image = UIImage(named: imageName)
-   //     imageNumber = imageNumber + 1
-    //    if imageNumber == 10 {
-    //        imageNumber = 0
+        var newMessageNumber : Int
+        repeat{
+            newMessageNumber = Int.random(in: 0...messages.count-1)
         }
+            while messageNumber == newMessageNumber
+        messageNumber = newMessageNumber
+        messageLabel.text = messages[messageNumber]
         
-        //let awesomeMessage = "You Are Fantastic"
-        //let greatMessage = "You are Great"
-       // let bombMessage = "You da bomb"
-        
-        //if messageLabel.text == awesomeMessage {
-         //   messageLabel.text = greatMessage
-        //    imageView.image = UIImage(named:"image1")
-        //}
-        //else if messageLabel.text == greatMessage {
-         //   messageLabel.text = bombMessage
-           // imageView.image = UIImage(named: "image2")
-        //}
-        //else {
-         //   messageLabel.text = awesomeMessage
-          //  imageView.image = UIImage(named:"image4")
-        //}
-
-
-    //@IBAction func messageButtonPressed(_ sender: UIButton) {
-      //  print("😎 The message button was pressed!")
-      //  messageLabel.text = "You Are Awesome!"
-      //  imageView.image = UIImage(named: "image4")
-        
+        var newImageNumber: Int
+        repeat{
+            newImageNumber = Int.random(in: 0...totalNumberOfImages)
+        }
+            while messageNumber == newMessageNumber
+        imageNumber = newImageNumber
+        imageView.image = UIImage(named: "image\(imageNumber)")
+      
+      var newSoundNumber: Int
+      repeat{
+         newSoundNumber = Int.random(in: 0...totalNumberOfSounds-1)
+      }
+      while soundNumber == newSoundNumber
+      soundNumber = newSoundNumber
+      print("*** the new sound number is \(soundNumber)")
+      playSound(name: "sound\(soundNumber)")
+   }
 }
+
+            
 
 
 
